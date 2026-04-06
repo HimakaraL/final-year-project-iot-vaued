@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   loginStart,
   loginSuccess,
@@ -10,16 +10,32 @@ import OAuth from "../components/OAuth";
 
 export default function Signin() {
   const [formdata, setFormData] = useState({});
+  const [submitted, setSubmitted] = useState(false);
+
   const { loading, error } = useSelector((state) => state.user);
-  const handleChange = (e) => {
-    setFormData({ ...formdata, [e.target.id]: e.target.value });
-  };
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  // ✅ Clear error on page load
+  useEffect(() => {
+    dispatch(loginFailure(null));
+  }, [dispatch]);
+
+  const handleChange = (e) => {
+    setFormData({ ...formdata, [e.target.id]: e.target.value });
+
+    // ✅ Clear error when typing
+    if (error) {
+      dispatch(loginFailure(null));
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitted(true);
     dispatch(loginStart());
+
     try {
       const res = await fetch("/backend/auth/signin", {
         method: "POST",
@@ -28,44 +44,61 @@ export default function Signin() {
         },
         body: JSON.stringify(formdata),
       });
-      const data = await res.json();
-      if (data.success) {
-        dispatch(loginSuccess(data));
-        navigate("/");
-      } else {
-        dispatch(loginFailure(data.message || "Login failed"));
+
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        dispatch(loginFailure("Invalid server response"));
+        return;
       }
-    } catch (error) {
-      dispatch(loginFailure(error));
-      console.error(error);
+
+      if (!res.ok) {
+        dispatch(loginFailure(data.message || "Login failed"));
+        return;
+      }
+
+      dispatch(loginSuccess(data));
+      navigate("/");
+    } catch (err) {
+      dispatch(loginFailure(err.message || "Network error"));
+      console.error(err);
     }
   };
+
   return (
     <div className="flex justify-center items-center flex-col gap-12 p-6">
       <div>
         <h1 className="text-xl font-extrabold">Log In</h1>
       </div>
+
       <div className="flex flex-col justify-center items-center">
         <input
           id="email"
+          type="email"
           placeholder="Email"
-          className="rounded-lg  bg-slate-300 p-1 m-1"
+          className="rounded-lg bg-slate-300 p-2 m-1 w-60"
           onChange={handleChange}
-        ></input>
+        />
+
         <input
           id="password"
+          type="password"
           placeholder="Password"
-          className="rounded-lg  bg-slate-300 p-1 m-1"
+          className="rounded-lg bg-slate-300 p-2 m-1 w-60"
           onChange={handleChange}
-        ></input>
+        />
+
         <button
           disabled={loading}
           className="bg-green-400 m-3 p-2 rounded-md w-60 hover:opacity-70"
           onClick={handleSubmit}
         >
-          {loading ? "Loading.." : "Log In"}
+          {loading ? "Loading..." : "Log In"}
         </button>
+
         <OAuth />
+
         <p className="text-xs">
           <Link to="/signup">
             Don&apos;t have an account?{" "}
@@ -73,7 +106,15 @@ export default function Signin() {
           </Link>
         </p>
       </div>
-      <p className="text-red-600">{error ? error.message || "Something went wrong" : ""}</p>
+
+      {/* ✅ Show error ONLY after submit */}
+      {submitted && error && (
+        <p className="text-red-600">
+          {typeof error === "string"
+            ? error
+            : error?.message || "Something went wrong"}
+        </p>
+      )}
     </div>
   );
 }
