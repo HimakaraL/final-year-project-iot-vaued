@@ -1,16 +1,5 @@
 ## 1. Clone the Repository
 
-Open your terminal and run:
-
-```bash
-git clone <your-repo-url>
-cd <repo-folder>
-```
-
-Replace `<your-repo-url>` with the URL of your repository and `<repo-folder>` with the folder name created by cloning.
-
----
-
 ## 2. Backend Setup
 
 ### Install Dependencies
@@ -102,8 +91,3 @@ root/
 ```
 
 ---
-
-## 7. Author
-
-* Your Name
-* Contact: [your.email@example.com](mailto:your.email@example.com)
