@@ -97,14 +97,14 @@ export default function Signin() {
           {loading ? "Loading..." : "Log In"}
         </button>
 
-        <OAuth />
+        {/* <OAuth /> */}
 
-        <p className="text-xs">
+        {/* <p className="text-xs">
           <Link to="/signup">
             Don&apos;t have an account?{" "}
             <span className="text-blue-500">Sign up</span>
           </Link>
-        </p>
+        </p> */}
       </div>
 
       {/* ✅ Show error ONLY after submit */}

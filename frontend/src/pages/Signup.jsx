@@ -66,7 +66,7 @@ export default function Signup() {
         >
           {loading ? "Loading.." : "Sign Up"}
         </button>
-        <OAuth />
+        {/* <OAuth /> */}
         <p className="text-xs">
           <Link to="/signin">
             Already have an account?{" "}
