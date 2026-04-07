@@ -61,6 +61,33 @@ npm run dev
 
 ---
 
+## 5. Color Palette
+
+// Background
+bg-[#F9FAFB]
+
+// Primary
+bg-[#1E3A8A]
+text-[#1E3A8A]
+
+// Secondary
+bg-[#3B82F6]
+
+// Card
+bg-white shadow-md rounded-2xl
+
+// Input
+bg-gray-100 focus:ring-2 focus:ring-[#3B82F6] outline-none
+
+// Button Primary
+bg-[#1E3A8A] hover:bg-[#3B82F6] text-white
+
+// Danger
+text-red-500
+
+
+---
+
 ## 4. Usage
 
 1. Start the backend first (`npm run dev` in root).
