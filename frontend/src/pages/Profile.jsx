@@ -151,6 +151,7 @@ export default function Profile() {
           placeholder='Username'
           className='bg-slate-100 rounded-lg p-3'
           onChange={handleChange}
+          readOnly
         />
         <input
           defaultValue={currentUser.userDetails.email}
@@ -159,25 +160,26 @@ export default function Profile() {
           placeholder='Email'
           className='bg-slate-100 rounded-lg p-3'
           onChange={handleChange}
+          readOnly
         />
-        <input
+        {/* <input
           type='password'
           id='password'
           placeholder='Password'
           className='bg-slate-100 rounded-lg p-3'
           onChange={handleChange}
-        />
-        <button className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>
+        /> */}
+        {/* <button className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>
           {loading ? 'Loading...' : 'Update'}
-        </button>
+        </button> */}
       </form>
       <div className='flex justify-between mt-5'>
-        <span
+        {/* <span
           className='text-red-700 cursor-pointer'
           onClick={handleDeleteAccount}
         >
           Delete Account
-        </span>
+        </span> */}
         <span className='text-red-700 cursor-pointer' onClick={handleSignOut}>
           Sign out
         </span>
