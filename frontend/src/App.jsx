@@ -1,28 +1,39 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Signin from "./pages/Signin";
-// import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
 import Dashboard from "./pages/Dashboard";
+const Overview = lazy(() => import("./pages/Overview"));
+const AddFloor = lazy(() => import("./pages/Floor"));
+const Notifications = lazy(() => import("./pages/Notifications"));
 
 export default function App() {
   return (
     <BrowserRouter>
       <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/signin" element={<Signin />} />
-        {/* <Route path="/signup" element={<Signup />} /> */}
-        <Route element={<PrivateRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Route>
-        <Route element={<PrivateRoute />}>
-          <Route path="/profile" element={<Profile />} />
-        </Route>
-      </Routes>
+
+      {/* Suspense wrapper */}
+      <Suspense fallback={<div className="p-6">Loading...</div>}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/signin" element={<Signin />} />
+
+          <Route element={<PrivateRoute />}>
+            <Route path="/dashboard" element={<Dashboard />}>
+              <Route index element={<Overview />} />
+              <Route path="add-floor" element={<AddFloor />} />
+              <Route path="notifications" element={<Notifications />} />
+            </Route>
+          </Route>
+
+          <Route element={<PrivateRoute />}>
+            <Route path="/profile" element={<Profile />} />
+          </Route>
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 }

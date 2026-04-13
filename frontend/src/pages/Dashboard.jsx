@@ -1,23 +1,52 @@
 import React, { useState } from "react";
 import { HiOutlineMenu } from "react-icons/hi";
+import {
+  MdDashboard,
+  MdAddHomeWork,
+  MdNotifications,
+} from "react-icons/md";
+import { Link, Outlet, useLocation } from "react-router-dom";
 
 export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
+
+  const menuItems = [
+    {
+      name: "Overview",
+      path: "/dashboard",
+      icon: <MdDashboard />,
+    },
+    {
+      name: "Floor Management",
+      path: "/dashboard/add-floor",
+      icon: <MdAddHomeWork />,
+    },
+    {
+      name: "System Notifications",
+      path: "/dashboard/notifications",
+      icon: <MdNotifications />,
+    },
+  ];
+
+  const getPageName = () => {
+    if (location.pathname.includes("add-floor")) return "Add a floor";
+    if (location.pathname.includes("notifications"))
+      return "System Notifications";
+    return "Overview";
+  };
 
   return (
     <div className="flex h-[calc(100vh-60px)] bg-[#F9FAFB] overflow-hidden">
       {/* Sidebar */}
       <aside
         className={`
-          /* 2. Changed inset-y-0 to top-0 and h-full for mobile */
-          /* 3. On desktop (md), we use top-auto because it lives inside the flex container */
           fixed inset-y-0 left-0 z-40 w-64 bg-white shadow-lg p-6
           transform transition-transform duration-300 ease-in-out
           md:relative md:translate-x-0 md:h-full 
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        {/* Mobile Close Button */}
         <button
           onClick={() => setSidebarOpen(false)}
           className="md:hidden absolute top-4 right-4 text-2xl p-2 rounded-md bg-gray-100"
@@ -26,19 +55,32 @@ export default function Dashboard() {
         </button>
 
         <nav className="flex flex-col gap-4 text-gray-700 font-medium mt-10 md:mt-0">
-          {["Overview", "Add a floor", "System Notifications"].map((item) => (
-            <a
-              key={item}
-              href={`#${item.toLowerCase()}`}
-              className="p-3 rounded-lg hover:bg-[#3B82F6] hover:text-white transition"
-            >
-              {item}
-            </a>
-          ))}
+          {menuItems.map((item) => {
+            const isActive =
+              location.pathname === item.path ||
+              (item.path === "/dashboard" &&
+                location.pathname === "/dashboard");
+
+            return (
+              <Link
+                key={item.name}
+                to={item.path}
+                onClick={() => setSidebarOpen(false)}
+                className={`flex items-center gap-3 p-3 rounded-lg transition ${
+                  isActive
+                    ? "bg-[#3B82F6] text-white"
+                    : "hover:bg-[#3B82F6] hover:text-white"
+                }`}
+              >
+                <span className="text-xl">{item.icon}</span>
+                {item.name}
+              </Link>
+            );
+          })}
         </nav>
       </aside>
 
-      {/* Main Content Area */}
+      {/* Main */}
       <main className="flex-1 overflow-y-auto p-6">
         {!sidebarOpen && (
           <div className="md:hidden mb-4">
@@ -51,27 +93,15 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* Header Section */}
-        <div className="mb-6">
-          <h1 className="text-3xl md:text-5xl font-bold text-[#1E3A8A]">
-            Floors Overview
-          </h1>
+        <div className="mb-4 text-sm text-gray-500">
+          Dashboard / <span className="font-medium text-gray-800">{getPageName()}</span>
         </div>
 
-        <div className="flex justify-between items-center gap-6 px-12">
-          {/* 2 parts */}
-          <div className="border-4 h-[40vh] rounded-lg flex-1 flex items-center justify-center text-xl font-semibold text-gray-500"></div>
-
-          {/* 1 part */}
-          <div className="border-4 h-[40vh] rounded-lg flex-1 flex items-center justify-center text-xl font-semibold text-gray-500"></div>
-        </div>
-
-        <div className="flex justify-between items-center gap-6 px-12 mt-1">
-          <div className="border-4 h-[60vh] rounded-lg flex-1 flex items-center justify-center text-xl font-semibold text-gray-500"></div>
-        </div>
+        {/* Page Content */}
+        <Outlet />
       </main>
 
-      {/* Overlay for mobile */}
+      {/* Overlay */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 z-30 bg-black bg-opacity-30 md:hidden"
