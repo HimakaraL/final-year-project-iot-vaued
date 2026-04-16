@@ -6,6 +6,7 @@ import Profile from "./pages/Profile";
 import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
 import Dashboard from "./pages/Dashboard";
+import FloorInfo from "./pages/FloorInfo";
 const Overview = lazy(() => import("./pages/Overview"));
 const AddFloor = lazy(() => import("./pages/Floor"));
 const Notifications = lazy(() => import("./pages/Notifications"));
@@ -31,6 +32,10 @@ export default function App() {
 
           <Route element={<PrivateRoute />}>
             <Route path="/profile" element={<Profile />} />
+          </Route>
+
+          <Route element={<PrivateRoute />}>
+            <Route path="/floor/:id" element={<FloorInfo />} />
           </Route>
         </Routes>
       </Suspense>
