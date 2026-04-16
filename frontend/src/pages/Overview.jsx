@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Overview() {
   const [floors, setFloors] = useState([]);
 
   const API_URL = "/backend/floors";
+
+  const navigate = useNavigate();
 
   // Fetch floors
   const fetchFloors = async () => {
@@ -74,7 +77,7 @@ export default function Overview() {
 
                   {/* Actions */}
                   <div className="flex justify-between items-center mt-4">
-                    <button className="text-blue-600 hover:underline">
+                    <button className="text-blue-600 hover:underline" onClick={() => navigate(`/floor/${floor._id}`)}>
                       View Analytics →
                     </button>
                   </div>

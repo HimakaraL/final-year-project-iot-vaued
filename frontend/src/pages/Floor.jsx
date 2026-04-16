@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Floor() {
   const [formData, setFormData] = useState({
@@ -8,6 +9,7 @@ export default function Floor() {
     sensor_id: "",
   });
 
+  const navigate = useNavigate();
   const [floors, setFloors] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -19,7 +21,7 @@ export default function Floor() {
       const res = await fetch(API_URL);
       const data = await res.json();
 
-      console.log("floors:", data);
+      // console.log("floors:", data);
 
       if (Array.isArray(data)) {
         setFloors(data);
@@ -89,6 +91,17 @@ export default function Floor() {
       console.error(err);
     }
   };
+
+  // const fetchFloorData = async (id) => {
+  //   try {
+  //     const res = await fetch(`/backend/sensor/floor/${id}`);
+  //     const data = await res.json();
+  //     console.log("Floor data:", data);
+  //   }
+  //   catch (err) {
+  //     console.error(err);
+  //   } 
+  // };
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -206,7 +219,7 @@ export default function Floor() {
 
                 {/* Actions */}
                 <div className="flex justify-between items-center mt-4">
-                  <button className="text-blue-600 hover:underline">
+                  <button className="text-blue-600 hover:underline" onClick={() => navigate(`/floor/${floor._id}`)}>
                     View Analytics →
                   </button>
 
