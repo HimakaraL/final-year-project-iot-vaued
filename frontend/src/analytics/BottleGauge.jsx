@@ -16,9 +16,9 @@ export default function BottleGauge({ data }) {
           lineStyle: {
             width: 12,
             color: [
-              [0.3, "#EF4444"], // low
-              [0.6, "#FACC15"], // medium
-              [1, "#22C55E"], // good
+              [0.3, "#EF4444"], 
+              [0.6, "#FACC15"], 
+              [1, "#22C55E"], 
             ],
           },
         },

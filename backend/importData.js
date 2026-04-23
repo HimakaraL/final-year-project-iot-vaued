@@ -15,24 +15,20 @@ const runImport = async () => {
   try {
     console.log("🚀 Starting import...");
 
-    // 🔌 CONNECT
     await mongoose.connect(process.env.MONGO);
     console.log("✅ MongoDB connected");
     console.log("📦 DB Name:", mongoose.connection.name);
     console.log("🌐 Host:", mongoose.connection.host);
     console.log("📁 Collection:", SensorData.collection.name);
 
-    // 🧠 SAFE HELPERS
     const safeDate = (value) => {
       const date = new Date(value);
       return isNaN(date.getTime()) ? new Date() : date;
     };
 
-    // 🧹 CLEAR DB
     const deleted = await SensorData.deleteMany({});
     console.log("🧹 Old data cleared:", deleted.deletedCount);
 
-    // 📂 READ FILE
     const filePath = path.join(__dirname, "data.json");
 
     if (!fs.existsSync(filePath)) {
@@ -47,7 +43,6 @@ const runImport = async () => {
       throw new Error("JSON file is empty!");
     }
 
-    // ✂️ SPLIT DATA
     const half = Math.floor(rawData.length / 2);
     const floor1Data = rawData.slice(0, half);
     const floor2Data = rawData.slice(half);
@@ -55,7 +50,6 @@ const runImport = async () => {
     console.log("🏢 Floor 1 records:", floor1Data.length);
     console.log("🏢 Floor 2 records:", floor2Data.length);
 
-    // 🆔 FLOOR IDS
     const FLOOR_1_ID = new mongoose.Types.ObjectId(
       "69dd22ab39cd1ab2c18b40ca"
     );
@@ -64,7 +58,6 @@ const runImport = async () => {
       "69dd235d39cd1ab2c18b40cd"
     );
 
-    // 🔄 TRANSFORM
     const transform = (dataset, floorId) =>
       dataset.map((d) => ({
         floor_id: floorId,
@@ -81,7 +74,6 @@ const runImport = async () => {
         cotton: d.cotton,
         bottle: d.bottle,
 
-        // 🚨 FIXED RFID (NO _id, CLEAN STRUCTURE)
         rfid: {
           item_count: d.rfid?.item_count || 0,
           in_stock: d.rfid?.in_stock || 0,
@@ -96,7 +88,6 @@ const runImport = async () => {
             })),
         },
 
-        // 🚨 SAFE DATE
         timestamp: safeDate(d.timestamp),
       }));
 
@@ -107,7 +98,6 @@ const runImport = async () => {
 
     console.log("📦 Final records to insert:", finalData.length);
 
-    // 🚀 INSERT
     const result = await SensorData.insertMany(finalData, {
       ordered: false,
     });
@@ -115,7 +105,6 @@ const runImport = async () => {
     console.log("🎉 Insert completed!");
     console.log("📥 Inserted docs:", result.length);
 
-    // 🔍 VERIFY
     const count = await SensorData.countDocuments();
     console.log("🔥 TOTAL IN DB NOW:", count);
 

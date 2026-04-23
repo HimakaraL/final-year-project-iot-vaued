@@ -3,7 +3,6 @@ import { HiOutlineMenu } from "react-icons/hi";
 import {
   MdDashboard,
   MdAddHomeWork,
-  MdNotifications,
 } from "react-icons/md";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
@@ -22,17 +21,10 @@ export default function Dashboard() {
       path: "/dashboard/add-floor",
       icon: <MdAddHomeWork />,
     },
-    {
-      name: "System Notifications",
-      path: "/dashboard/notifications",
-      icon: <MdNotifications />,
-    },
   ];
 
   const getPageName = () => {
     if (location.pathname.includes("add-floor")) return "Add a floor";
-    if (location.pathname.includes("notifications"))
-      return "System Notifications";
     return "Overview";
   };
 
@@ -81,7 +73,7 @@ export default function Dashboard() {
       </aside>
 
       {/* Main */}
-      <main className="flex-1 overflow-y-auto p-6">
+      <main className="flex-1 overflow-y-auto p-6 custom-scrollbar">
         {!sidebarOpen && (
           <div className="md:hidden mb-4">
             <button
