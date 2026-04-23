@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { MdFilterList } from "react-icons/md";
 
 export default function Floor() {
-  const [formData, setFormData] = useState({
-    name: "",
-    floorNumber: "",
-    location: "",
-    sensor_id: "",
-  });
+  // const [formData, setFormData] = useState({
+  //   name: "",
+  //   floorNumber: "",
+  //   location: "",
+  //   sensor_id: "",
+  // });
 
   const navigate = useNavigate();
   const [floors, setFloors] = useState([]);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
+  const [searchFloor, setSearchFloor] = useState("");
 
   const API_URL = "/backend/floors";
 
@@ -39,45 +41,45 @@ export default function Floor() {
   }, []);
 
   // Handle input change
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  // const handleChange = (e) => {
+  //   setFormData({
+  //     ...formData,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
 
   // Add floor
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
 
-    try {
-      const res = await fetch(`${API_URL}/create`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...formData,
-          floorNumber: Number(formData.floorNumber),
-        }),
-      });
+  //   try {
+  //     const res = await fetch(`${API_URL}/create`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         ...formData,
+  //         floorNumber: Number(formData.floorNumber),
+  //       }),
+  //     });
 
-      const data = await res.json();
+  //     const data = await res.json();
 
-      setFloors((prev) => [...prev, data]);
-      setFormData({
-        name: "",
-        floorNumber: "",
-        location: "",
-        sensor_id: "",
-      });
-    } catch (err) {
-      console.error(err);
-    }
+  //     setFloors((prev) => [...prev, data]);
+  //     setFormData({
+  //       name: "",
+  //       floorNumber: "",
+  //       location: "",
+  //       sensor_id: "",
+  //     });
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
 
-    setLoading(false);
-  };
+  //   setLoading(false);
+  // };
 
   // Delete floor
   const handleDelete = async (id) => {
@@ -100,7 +102,7 @@ export default function Floor() {
   //   }
   //   catch (err) {
   //     console.error(err);
-  //   } 
+  //   }
   // };
 
   return (
@@ -126,14 +128,9 @@ export default function Floor() {
             {floors.filter((f) => f.sensor_id).length}
           </h2>
         </div>
-
-        <div className="bg-white shadow rounded-xl p-4">
-          <p className="text-gray-500">System Status</p>
-          <h2 className="text-2xl font-bold text-green-600">Online</h2>
-        </div>
       </div>
 
-      <div className="bg-white shadow-lg rounded-2xl p-6 mb-8">
+      {/* <div className="bg-white shadow-lg rounded-2xl p-6 mb-8">
         <h2 className="text-xl font-semibold mb-4">Create New Floor</h2>
 
         <form
@@ -186,6 +183,17 @@ export default function Floor() {
             {loading ? "Adding Floor..." : "Add Floor"}
           </button>
         </form>
+      </div> */}
+
+      <div className="relative w-full md:w-1/3 mb-5">
+        <input
+          type="text"
+          placeholder="Search by floor number..."
+          value={searchFloor}
+          onChange={(e) => setSearchFloor(e.target.value)}
+          className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <MdFilterList className="absolute left-3 top-2.5 text-gray-500 text-xl" />
       </div>
 
       {/* FLOOR LIST */}
@@ -196,42 +204,52 @@ export default function Floor() {
           <p className="text-gray-500">No floors added yet</p>
         ) : (
           <div className="grid md:grid-cols-2 gap-4">
-            {floors.map((floor) => (
-              <div
-                key={floor._id}
-                className="border rounded-xl p-5 hover:shadow-lg transition bg-white"
-              >
-                <h3 className="text-lg font-bold text-[#1E3A8A]">
-                  {floor.name}
-                </h3>
+            {floors
+              .filter((f) =>
+                f.floorNumber
+                  ?.toString()
+                  .toLowerCase()
+                  .includes(searchFloor.toLowerCase()),
+              )
+              .map((floor) => (
+                <div
+                  key={floor._id}
+                  className="border rounded-xl p-5 hover:shadow-lg transition bg-white"
+                >
+                  <h3 className="text-lg font-bold text-[#1E3A8A]">
+                    {floor.name}
+                  </h3>
 
-                <p className="text-sm text-gray-600">
-                  Floor: {floor.floorNumber}
-                </p>
+                  <p className="text-sm text-gray-600">
+                    Floor: {floor.floorNumber}
+                  </p>
 
-                <p className="text-sm text-gray-600">
-                  Location: {floor.location || "N/A"}
-                </p>
+                  <p className="text-sm text-gray-600">
+                    Location: {floor.location || "N/A"}
+                  </p>
 
-                {/* <p className="text-sm text-gray-600">
+                  {/* <p className="text-sm text-gray-600">
                   Sensor: {floor.sensor_id || "N/A"}
                 </p> */}
 
-                {/* Actions */}
-                <div className="flex justify-between items-center mt-4">
-                  <button className="text-blue-600 hover:underline" onClick={() => navigate(`/floor/${floor._id}`)}>
-                    View Analytics →
-                  </button>
+                  {/* Actions */}
+                  <div className="flex justify-between items-center mt-4">
+                    <button
+                      className="text-blue-600 hover:underline"
+                      onClick={() => navigate(`/floor/${floor._id}`)}
+                    >
+                      View Analytics →
+                    </button>
 
-                  <button
-                    onClick={() => handleDelete(floor._id)}
-                    className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600"
-                  >
-                    Delete
-                  </button>
+                    <button
+                      onClick={() => handleDelete(floor._id)}
+                      className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         )}
       </div>

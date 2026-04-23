@@ -9,7 +9,6 @@ import Dashboard from "./pages/Dashboard";
 import FloorInfo from "./pages/FloorInfo";
 const Overview = lazy(() => import("./pages/Overview"));
 const AddFloor = lazy(() => import("./pages/Floor"));
-const Notifications = lazy(() => import("./pages/Notifications"));
 
 export default function App() {
   return (
@@ -26,7 +25,6 @@ export default function App() {
             <Route path="/dashboard" element={<Dashboard />}>
               <Route index element={<Overview />} />
               <Route path="add-floor" element={<AddFloor />} />
-              <Route path="notifications" element={<Notifications />} />
             </Route>
           </Route>
 

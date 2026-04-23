@@ -17,9 +17,9 @@ export default function AQIGauge({ data }) {
           lineStyle: {
             width: 12,
             color: [
-              [0.3, "#22C55E"], // green
-              [0.7, "#FACC15"], // yellow
-              [1, "#EF4444"], // red
+              [0.3, "#22C55E"], 
+              [0.7, "#FACC15"], 
+              [1, "#EF4444"], 
             ],
           },
         },

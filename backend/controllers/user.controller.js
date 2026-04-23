@@ -8,7 +8,6 @@ export const test = (req, res) => {
   });
 };
 
-
 // update user details
 export const updateUser = async (req, res, next) => {
   if (req.user.id !== req.params.id) {
