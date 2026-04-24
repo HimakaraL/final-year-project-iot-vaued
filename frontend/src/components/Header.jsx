@@ -91,7 +91,7 @@ export default function Header() {
                 onClick={() => setShowNotifications(!showNotifications)}
                 className="relative hover:text-[#1E3A8A]"
               >
-                <MdNotifications className="text-xl" />
+                <MdNotifications className="text-2xl" />
 
                 {notifications.length > 0 && (
                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 rounded-full">
