@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema(
     },
     profilePicture: {
       type: String,
-      default: "https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001882.png",
+      default: "https://api.dicebear.com/9.x/avataaars-neutral/svg?seed=user",
     },
   },
   { timestamps: true }

@@ -5,6 +5,7 @@ import {
   MdAddHomeWork,
 } from "react-icons/md";
 import { Link, Outlet, useLocation } from "react-router-dom";
+import ChatWidget from "../chatbot/ChatWidget";
 
 export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -100,6 +101,8 @@ export default function Dashboard() {
           onClick={() => setSidebarOpen(false)}
         />
       )}
+
+      <ChatWidget />
     </div>
   );
 }

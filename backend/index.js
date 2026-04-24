@@ -5,6 +5,7 @@ import userRoutes from "./routes/user.route.js"
 import authRoutes from "./routes/auth.route.js"
 import floorRoutes from "./routes/floor.route.js";
 import sensorRoutes from "./routes/sensor.route.js";
+import chatRoutes from "./routes/chat.route.js";
 import cookieParser from "cookie-parser";
 import path from "path";
 dotenv.config();
@@ -28,7 +29,8 @@ app.use(cookieParser());
 app.use("/backend/user", userRoutes)
 app.use("/backend/auth", authRoutes)
 app.use("/backend/floors", floorRoutes);
-app.use("/backend/sensor", sensorRoutes);
+app.use("/backend/sensor", sensorRoutes);   
+app.use("/backend/chat", chatRoutes);
 
 app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
